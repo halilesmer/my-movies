@@ -1,16 +1,14 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 class MovieList extends React.Component {
-
-  trancateOverview = ((string, maxLength) => {
-    if (!string) return null
-    if(string.length <= maxLength) return string
+  trancateOverview = (string, maxLength) => {
+    if (!string) return null;
+    if (string.length <= maxLength) return string;
     if (string.length >= maxLength) {
       return `${string.substring(0, 100)} ...`;
-    };
-
-
-})
+    }
+  };
 
   render() {
     return (
@@ -39,6 +37,14 @@ class MovieList extends React.Component {
                     >
                       Delete
                     </button>
+
+                    <Link
+                      typ="button"
+                      className="btn btn-md btn-outline-primary"
+                      to={`/edit/${movie.id}`}
+                    >
+                      Edit
+                    </Link>
 
                     <h2>
                       <span className="badge bg-info dark">{movie.rating}</span>
@@ -71,5 +77,4 @@ export default MovieList;
     </button>
                      */
 
-
-    /* <p className="card-text text-truncate">{movie.overview}</p> */
+/* <p className="card-text text-truncate">{movie.overview}</p> */
