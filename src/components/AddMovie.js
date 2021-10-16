@@ -6,6 +6,8 @@ class AddMovie extends React.Component {
     event.preventDefault();
     let newMovie = serialize(event.currentTarget, { hash: true });
     this.props.onAddMovie(newMovie);
+
+
   };
 
   render() {
