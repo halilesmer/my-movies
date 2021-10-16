@@ -9,12 +9,13 @@ class EditMovie extends React.Component {
     imageURL: "",
   };
   async componentDidMount() {
-      
     const id = this.props.match.params.id;
 
-    const response = await (await axios.get(`http://localhost:3002/movies/${id}`));
-    console.log("response: ", response.data);
-const movie= response.data
+    const response =  await axios.get(
+      `http://localhost:3002/movies/${id}`
+    );
+    //console.log("response: ", response.data);
+    const movie = response.data;
     this.setState({
       name: movie.name,
       rating: movie.rating,
@@ -23,12 +24,36 @@ const movie= response.data
     });
   }
 
+  onInputChange = (event) => {
+    //console.log(event.target.name);
+    //console.log(event.target.value);
+
+    this.setState({
+        [event.currentTarget.name] :event.currentTarget.value
+
+    });
+  };
+
   handleFormSubmit = (event) => {
     event.preventDefault();
+
+    const { name, rating, imageURL, overview } = this.state;
+
+    const id = this.props.match.params.id;
+
+    const updatedMovie = {
+      name,
+      rating,
+      imageURL,
+      overview,
+    };
+      this.props.onEditMovie(id, updatedMovie)
+    this.props.history.push('/')
   };
-    render() {
-console.log("componentDidMount: ", this.componentDidMount);
-      
+    
+  render() {
+    //console.log("componentDidMount: ", this.componentDidMount);
+
     return (
       <div className="container">
         <form className="mt-5" onSubmit={this.handleFormSubmit}>
@@ -47,6 +72,7 @@ console.log("componentDidMount: ", this.componentDidMount);
                 className="form-control"
                 name="name"
                 value={this.state.name}
+                onChange={this.onInputChange}
               />
             </div>
             <div className="form-group col-md-2">
@@ -56,6 +82,7 @@ console.log("componentDidMount: ", this.componentDidMount);
                 className="form-control"
                 name="rating"
                 value={this.state.rating}
+                onChange={this.onInputChange}
               />
             </div>
           </div>
@@ -67,6 +94,7 @@ console.log("componentDidMount: ", this.componentDidMount);
                 className="form-control"
                 name="imageURL"
                 value={this.state.imageURL}
+                onChange={this.onInputChange}
               />
             </div>
           </div>
@@ -78,6 +106,7 @@ console.log("componentDidMount: ", this.componentDidMount);
                 name="overview"
                 rows="5"
                 value={this.state.overview}
+                onChange={this.onInputChange}
               ></textarea>
             </div>
           </div>

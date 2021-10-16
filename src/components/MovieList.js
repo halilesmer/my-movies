@@ -3,11 +3,9 @@ import { Link } from "react-router-dom";
 
 class MovieList extends React.Component {
   trancateOverview = (string, maxLength) => {
+
     if (!string) return null;
-    if (string.length <= maxLength) return string;
-    if (string.length >= maxLength) {
-      return `${string.substring(0, 100)} ...`;
-    }
+    return `${string.length > maxLength ? string.substring(0, maxLength) : string} ...`;
   };
 
   render() {
@@ -25,7 +23,7 @@ class MovieList extends React.Component {
                 <div className="card-body">
                   <h5 className="card-title">{movie.name}</h5>
                   <p className="card-text">
-                    {this.trancateOverview(movie.overview, 100)}
+                    {this.trancateOverview(movie.overview, 90)}
                   </p>
                   <div className="d-flex justify-content-between align-items-center">
                     <button

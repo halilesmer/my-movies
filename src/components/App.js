@@ -37,81 +37,79 @@ class App extends React.Component {
     await axios.post(`http://localhost:3002/movies/`, movie);
     this.setState((state) => ({ movies: state.movies.concat([movie]) }));
   };
+  // Edit Movie
+  editMovie = async (id, updatedMovie) => {
+    await axios.put(`http://localhost:3002/movies/${id}`, updatedMovie);
+    this.setState((state) => ({ movies: state.movies.concat([updatedMovie]) }));
+  };
+
   render() {
     const filteredMovies = this.state.movies
       .filter((movie) => {
-       
         return movie.name
           .toLowerCase()
           .includes(this.state.searchQuery.toLowerCase());
       })
       .sort((a, b) => {
         return a.id - b.id;
-      }).reverse();
-        
-    
+      })
+      .reverse();
 
     return (
-
       <Router>
-                <div className="container">
-                    <Switch>
+        <div className="container">
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => (
+                <React.Fragment>
+                  <div className="row">
+                    <div className="col-lg-12">
+                      <SearchBar searchMovieProp={this.searchMovie} />
+                    </div>
+                  </div>
+
+                  <MovieList
+                    movies={filteredMovies}
+                    deleteMovieProp={this.deleteMovie}
+                  />
+                </React.Fragment>
+              )}
+            ></Route>
 
 
+            <Route
+              path="/add"
+              render={({ history }) => (
+                <AddMovie
+                  onAddMovie={(movie) => {
+                    this.addMovie(movie);
+                    history.push("/");
+                  }}
+                />
+              )}
+            ></Route>
 
-                        <Route path="/" exact render={() => (
-                            <React.Fragment>
-                                <div className="row">
-                                    <div className="col-lg-12">
-                                        <SearchBar searchMovieProp={this.searchMovie} />
-                                    </div>
-                                </div>
-                            
-                                <MovieList
-                                    movies={filteredMovies}
-                                    deleteMovieProp={this.deleteMovie} 
-                                
-                                />
-                            </React.Fragment>
-                        )}>
-
-                        </Route>
-
-                        <Route path="/add" component={AddMovie} />
-                        <Route path="/add" render={({history}) => (
-
-                            <AddMovie 
-
-                            onAddMovie = {(movie) => {this.addMovie(movie)
-                                history.push("/")
-                            }
-                        }
-
-                            />
-
-                        )}>
-
-                        </Route>
-
-                        <Route path="/edit/:id" component={EditMovie} />
-
-
-                    </Switch>
-                </div>
-            </Router>
-        
-        )
+            <Route
+              path="/edit/:id"
+              render={(props) => (
+                <EditMovie
+                  {...props}
+                  onEditMovie={(id, movie) => {
+                    this.editMovie(id, movie);
+                  }}
+                />
+              )}
+            ></Route>
+          </Switch>
+        </div>
+      </Router>
+    );
   }
 }
 
 export default App;
-
-
-
-
-
-
-
 
 /* 
 
